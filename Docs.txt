@@ -1,0 +1,22 @@
+Input - 
+	1. Principal Amount
+	2. Duration in Months
+	3. Interest Rate
+	4. Table Format - 
+		1. Monthly 
+		2. Yearly
+
+Output - 
+	Table - 
+		col 1 - Date or Duration
+		col 2 - Principle Amount
+		col 3 - Interest Amount
+		col 4 - Total Amount = col 2 + col 3
+
+Functions -
+	1. Display - 
+		i. Monthly Calculator
+		ii. Yearly Calculator
+	2. Calculation - 
+		i. Monthly Calculator
+		ii. Yearly Calculator

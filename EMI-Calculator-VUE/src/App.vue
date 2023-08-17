@@ -1,30 +1,51 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import Input from './components/Input.vue'
+import Displaytable from './components/Displaytable.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
+    <h1>EMI Calculator</h1>
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <Input class="input" />
     </div>
   </header>
 
   <main>
-    <TheWelcome />
+    <Displaytable />
   </main>
 </template>
 
 <style scoped>
 header {
-  line-height: 1.5;
+  flex: flex;
+  place-items: center;
+  padding-right: calc(var(--section-gap) / 2);
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
 }
 
+header h1{
+  color: white;
+  font-size: 2rem;
+}
 .logo {
   display: block;
   margin: 0 auto 2rem;
+}
+
+.input {
+  background-color: white;
+  padding: 10%;
+  border-radius: 15px;
+  width: 350px;
+}
+
+main {
+  flex: flex;
+  align-items: center;
 }
 
 @media (min-width: 1024px) {
