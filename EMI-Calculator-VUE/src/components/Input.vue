@@ -70,12 +70,14 @@ export default {
 
             let principal = parseFloat(this.form.amount);
             let interest_rate = parseFloat(this.form.interest_rate);
+            let months;
+            let monthly_interest;
             if(this.form.display === "monthly") {
-                let months = parseInt(this.form.months);
-                let monthly_interest = interest_rate / 12 / 100;
+                months = parseInt(this.form.months);
+                monthly_interest = interest_rate / 12 / 100;
             } else {
-                let months = parseInt(this.form.months) / 12;
-                let monthly_interest = interest_rate / 100;
+                months = parseInt(this.form.months) / 12;
+                monthly_interest = interest_rate / 100;
             }
 
             for (let i = 0; i < months; i++) {
