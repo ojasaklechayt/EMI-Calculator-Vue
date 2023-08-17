@@ -10,10 +10,10 @@
                 <input type="number" class="input-field" placeholder="Loan Term (Months)">
                 <div class="choose">
                     <input id="monthly" type="radio" class="input-field-radio" name="timeline">
-                    <label for="monthly">Monthly</label>
+                    <label for="monthly">Display Monthly</label>
                     <br>
                     <input id="annually" type="radio" class="input-field-radio" name="timeline">
-                    <label for="annually">Annually</label>
+                    <label for="annually">Display Annually</label>
                 </div>
                 <p class="info-text">*1 Year = 12 Months</p>
                 <button class="calculate-button">Calculate</button>
@@ -34,7 +34,7 @@
 .choose{
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 5px;
 }
 .info-text {
     font: white;
