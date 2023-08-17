@@ -3,8 +3,8 @@ export default {
     data() {
         return {
             tableData: [
-                { monthYear: 'Jan 2023', principalAmount: 1000, interestAmount: 50, totalAmount: 1050 },
-                { monthYear: 'Feb 2023', principalAmount: 950, interestAmount: 47.5, totalAmount: 997.5 },
+                { monthYear: 'Jan 2023', openingAmount: 1000, emivalue:20, interestAmount: 50, principleamount:500, totalAmount: 1050 },
+                { monthYear: 'Feb 2023', openingAmount: 950, emivalue:20, interestAmount: 47.5, principleamount:500, totalAmount: 997.5 },
             ]
         }
     }
@@ -13,27 +13,30 @@ export default {
 </script>
 
 <template>
-    <div class="table-container">
-        <table class="custom-table">
-            <thead>
-                <tr>
-                    <th>Months/Years</th>
-                    <th>Principal Amount</th>
-                    <th>Interest Amount</th>
-                    <th>Total Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Use v-for to loop through your data and populate the table rows -->
-                <tr v-for="(row, index) in tableData" :key="index">
-                    <td>{{ row.monthYear }}</td>
-                    <td>{{ row.principalAmount }}</td>
-                    <td>{{ row.interestAmount }}</td>
-                    <td>{{ row.totalAmount }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="results" v-if="table.opening.length > 0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Opening Balance</th>
+                        <th>EMI</th>
+                        <th>Interest Payment</th>
+                        <th>Principal Amount</th>
+                        <th>Closing Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(month, index) in table.opening.length" :key="index">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ table.opening[index].toFixed(2) }}</td>
+                        <td>{{ table.emi[index].toFixed(2) }}</td>
+                        <td>{{ table.interest_payment[index].toFixed(2) }}</td>
+                        <td>{{ table.principal_amount[index].toFixed(2) }}</td>
+                        <td>{{ table.closing_balance[index].toFixed(2) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 </template>
 
 <style scoped>

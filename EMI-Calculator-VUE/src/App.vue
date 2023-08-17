@@ -11,9 +11,9 @@ import Displaytable from './components/Displaytable.vue'
     </div>
   </header>
 
-  <main>
+  <!-- <main>
     <Displaytable />
-  </main>
+  </main> -->
 </template>
 
 <style scoped>
