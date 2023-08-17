@@ -1,3 +1,17 @@
+<script>
+export default {
+    data() {
+        return {
+            tableData: [
+                { monthYear: 'Jan 2023', principalAmount: 1000, interestAmount: 50, totalAmount: 1050 },
+                { monthYear: 'Feb 2023', principalAmount: 950, interestAmount: 47.5, totalAmount: 997.5 },
+            ]
+        }
+    }
+}
+
+</script>
+
 <template>
     <div class="table-container">
         <table class="custom-table">
@@ -21,14 +35,6 @@
         </table>
     </div>
 </template>
-
-<script setup>
-const tableData = [
-    { monthYear: 'Jan 2023', principalAmount: 1000, interestAmount: 50, totalAmount: 1050 },
-    { monthYear: 'Feb 2023', principalAmount: 950, interestAmount: 47.5, totalAmount: 997.5 },
-    // Add more rows as needed
-];
-</script>
 
 <style scoped>
 .table-container {
