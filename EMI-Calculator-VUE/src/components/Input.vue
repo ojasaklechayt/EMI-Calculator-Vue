@@ -70,8 +70,13 @@ export default {
 
             let principal = parseFloat(this.form.amount);
             let interest_rate = parseFloat(this.form.interest_rate);
-            let months = parseFloat(this.form.months);
-            let monthly_interest = interest_rate / 12 / 100;
+            if(this.form.display === "monthly") {
+                let months = parseInt(this.form.months);
+                let monthly_interest = interest_rate / 12 / 100;
+            } else {
+                let months = parseInt(this.form.months) / 12;
+                let monthly_interest = interest_rate / 100;
+            }
 
             for (let i = 0; i < months; i++) {
                 this.table.opening.push(principal);
