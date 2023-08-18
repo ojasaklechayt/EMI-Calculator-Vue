@@ -2,15 +2,13 @@
     <div class="main">
         <div>
             <form class="Form" @submit.prevent="calculate">
-                <input v-model="form.amount" type="number" class="input-field" placeholder="Loan Amount">
-                <input v-model="form.interest_rate" type="number" class="input-field" placeholder="Interest Rate (%)">
-                <input v-model="form.months" type="number" class="input-field" placeholder="Loan Term (Months)">
-                <p>Choose Timeline</p>
+                <input v-model="form.amount" class="input-field" placeholder="Loan Amount">
+                <input v-model="form.interest_rate" class="input-field" placeholder="Interest Rate (%)">
                 <select v-model="form.display" class="choose">
-                    <option value="monthly">Display Monthly</option>
-                    <option value="annually">Display Annually</option>
+                    <option value="monthly">Monthly Installment</option>
+                    <option value="annually">Annual Installment</option>
                 </select>
-                <p class="info-text">*1 Year = 12 Months</p>
+                <input v-model="form.months" class="input-field" :placeholder="loantermsplaceholder">
                 <button type="submit" class="calculate-button">Calculate</button>
             </form>
         </div>
@@ -36,6 +34,11 @@ export default {
             }
         }
     },
+    computed: {
+        loantermsplaceholder() {
+            return this.form.display === 'monthly' ? 'Loan Terms (No. of Months)' : 'Loan Terms (No. of Years)';
+        }
+    },
     methods: {
         calculate() {
             this.table.opening = [];
@@ -43,16 +46,14 @@ export default {
             this.table.interest_payment = [];
             this.table.principal_amount = [];
             this.table.closing_balance = [];
-
             let principal = parseFloat(this.form.amount);
             let interest_rate = parseFloat(this.form.interest_rate);
             let months;
             let monthly_interest;
+            months = parseInt(this.form.months);
             if(this.form.display === "monthly") {
-                months = parseInt(this.form.months);
                 monthly_interest = interest_rate / 12 / 100;
             } else {
-                months = parseInt(this.form.months) / 12;
                 monthly_interest = interest_rate / 100;
             }
 
@@ -96,6 +97,9 @@ export default {
     flex-direction: row;
     gap: 5px;
     border: 2px solid black;
+    border-radius: 5px;
+    height:30px;
+    width: 300px;
 }
 
 .info-text {
