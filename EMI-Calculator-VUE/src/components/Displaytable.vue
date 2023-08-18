@@ -1,42 +1,47 @@
 <script>
 export default {
-    data() {
-        return {
-            tableData: [
-                { monthYear: 'Jan 2023', openingAmount: 1000, emivalue:20, interestAmount: 50, principleamount:500, totalAmount: 1050 },
-                { monthYear: 'Feb 2023', openingAmount: 950, emivalue:20, interestAmount: 47.5, principleamount:500, totalAmount: 997.5 },
-            ]
-        }
-    }
-}
+    props: {
+        tableData: {
+            type: Array,
+            default: () => ({
+                opening: [],
+                emi: [],
+                interest_payment: [],
+                principal_amount: [],
+                closing_balance: [],
+                display: "Null"
+            })
+        },
+    },
+};
 
 </script>
 
 <template>
-    <div class="results" v-if="table.opening.length > 0">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Month</th>
-                        <th>Opening Balance</th>
-                        <th>EMI</th>
-                        <th>Interest Payment</th>
-                        <th>Principal Amount</th>
-                        <th>Closing Balance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(month, index) in table.opening.length" :key="index">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ table.opening[index].toFixed(2) }}</td>
-                        <td>{{ table.emi[index].toFixed(2) }}</td>
-                        <td>{{ table.interest_payment[index].toFixed(2) }}</td>
-                        <td>{{ table.principal_amount[index].toFixed(2) }}</td>
-                        <td>{{ table.closing_balance[index].toFixed(2) }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="table-container" v-if="tableData.opening.length > 0">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>{{ tableData.display === "monthly" ? "Months" : "Years" }}</th>
+                    <th>Opening Balance</th>
+                    <th>EMI</th>
+                    <th>Interest Payment</th>
+                    <th>Principal Amount</th>
+                    <th>Closing Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in tableData.opening" :key="index">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ item ? item.toFixed(2) : '' }}</td>
+                    <td>{{ tableData.emi[index] ? tableData.emi[index].toFixed(2) : '' }}</td>
+                    <td>{{ tableData.interest_payment[index] ? tableData.interest_payment[index].toFixed(2) : '' }}</td>
+                    <td>{{ tableData.principal_amount[index] ? tableData.principal_amount[index].toFixed(2) : '' }}</td>
+                    <td>{{ tableData.closing_balance[index] ? tableData.closing_balance[index].toFixed(2) : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <style scoped>
@@ -44,7 +49,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 40px;
+    margin: 40px 0;
     padding-right: 70px;
 }
 

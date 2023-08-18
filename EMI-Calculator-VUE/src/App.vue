@@ -1,19 +1,44 @@
-<script setup>
+<script>
 import Input from './components/Input.vue'
 import Displaytable from './components/Displaytable.vue'
+
+export default {
+  name: "App",
+  data() {
+    return {
+      table: {
+        opening: [],
+        emi: [],
+        interest_payment: [],
+        principal_amount: [],
+        closing_balance: [],
+        display: "Null"
+      }
+    }
+  },
+  components: {
+    Input, Displaytable,
+  },
+  methods: {
+    GetData(data) {
+      this.table = data;
+    }
+  },
+}
+
 </script>
 
 <template>
   <header>
     <h1>EMI Calculator</h1>
     <div class="wrapper">
-      <Input class="input" />
+      <Input class="input" @values-calculated="GetData($event)" />
     </div>
   </header>
 
-  <!-- <main>
-    <Displaytable />
-  </main> -->
+  <main>
+    <Displaytable :tableData="table"/>
+  </main>
 </template>
 
 <style scoped>
@@ -27,10 +52,11 @@ header {
   margin-top: 40px;
 }
 
-header h1{
+header h1 {
   color: white;
   font-size: 2rem;
 }
+
 .logo {
   display: block;
   margin: 0 auto 2rem;

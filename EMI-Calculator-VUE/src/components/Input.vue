@@ -14,30 +14,6 @@
                 <button type="submit" class="calculate-button">Calculate</button>
             </form>
         </div>
-        <div class="results" v-if="table.opening.length > 0">
-            <table>
-                <thead>
-                    <tr>
-                        <th>{{form.display === "monthly" ? "Month" : "Year"}}</th>
-                        <th>Opening Balance</th>
-                        <th>EMI</th>
-                        <th>Interest Payment</th>
-                        <th>Principal Amount</th>
-                        <th>Closing Balance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(month, index) in table.opening.length" :key="index">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ table.opening[index].toFixed(2) }}</td>
-                        <td>{{ table.emi[index].toFixed(2) }}</td>
-                        <td>{{ table.interest_payment[index].toFixed(2) }}</td>
-                        <td>{{ table.principal_amount[index].toFixed(2) }}</td>
-                        <td>{{ table.closing_balance[index].toFixed(2) }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 </template>
 
@@ -93,6 +69,14 @@ export default {
                 this.table.closing_balance.push(calc_closing_balance);
                 principal = calc_closing_balance;
             }
+            this.$emit('values-calculated',{
+                opening: this.table.opening,
+                emi: this.table.emi,
+                interest_payment: this.table.interest_payment,
+                principal_amount: this.table.principal_amount,
+                closing_balance: this.table.closing_balance,
+                display: this.form.display
+            });
         }
     }
 }
