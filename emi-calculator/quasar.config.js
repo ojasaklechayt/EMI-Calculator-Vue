@@ -83,6 +83,17 @@ module.exports = configure(function (/* ctx */) {
       // vitePlugins: [
       //   [ 'package-name', { ..options.. } ]
       // ]
+      chainWebpack(config) {
+        config.module
+          .rule('eslint')
+          .use('eslint-loader')
+          .loader('eslint-loader')
+          .tap(options => {
+            // Modify options here if needed
+            options.configFile = '/eslintrc.js'; // Specify the path to your ESLint config
+            return options;
+          });
+      }
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
