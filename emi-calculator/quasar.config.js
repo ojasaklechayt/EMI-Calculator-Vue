@@ -90,7 +90,7 @@ module.exports = configure(function (/* ctx */) {
           .loader('eslint-loader')
           .tap(options => {
             // Modify options here if needed
-            options.configFile = '/eslintrc.js'; // Specify the path to your ESLint config
+            options.configFile = '.quasar/eslintrc.js'; // Specify the path to your ESLint config
             return options;
           });
       }
