@@ -4,7 +4,8 @@
       <h2 class="title">Loan Calculator</h2>
       <q-input class="input-ok" filled v-model="form.amount" placeholder="Loan Amount" input-class="text-left" />
       <br>
-      <q-input class="input-ok" filled v-model="form.interest_rate" placeholder="Interest Rate (%)" input-class="text-left" />
+      <q-input class="input-ok" filled v-model="form.interest_rate" placeholder="Interest Rate (%)"
+        input-class="text-left" />
       <br>
       <q-select class="input-select" v-model="form.display" :options="displayOptions" label="Display"></q-select>
       <br>
@@ -14,28 +15,40 @@
     </div>
 
     <div class="table-container" v-if="showTable">
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>{{ displayLabel }}</th>
-            <th>Opening Balance</th>
-            <th>EMI</th>
-            <th>Interest Payment</th>
-            <th>Principal Amount</th>
-            <th>Closing Balance</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in tableData.opening" :key="index">
-            <td>{{ displayValue(index) }}</td>
-            <td>{{ formatValue(item) }}</td>
-            <td>{{ formatValue(tableData.emi[index]) }}</td>
-            <td>{{ formatValue(tableData.interest_payment[index]) }}</td>
-            <td>{{ formatValue(tableData.principal_amount[index]) }}</td>
-            <td>{{ formatValue(tableData.closing_balance[index]) }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <q-table class="custom-table" :rows="tableData.map((row, index) => ({
+        index: index + 1,
+        opening: row.opening.toFixed(2),
+        emi: row.emi.toFixed(2),
+        interest_payment: row.interest_payment.toFixed(2),
+        principal_amount: row.principal_amount.toFixed(2),
+        closing_balance: row.closing_balance.toFixed(2)
+      }))" :columns="[
+  {
+    label: displayLabel,
+    field: 'index',
+    name: 'index'
+  },
+  {
+    label: 'Opening Balance',
+    field: 'opening'
+  },
+  {
+    label: 'EMI',
+    field: 'emi'
+  },
+  {
+    label: 'Interest Payment',
+    field: 'interest_payment'
+  },
+  {
+    label: 'Principal Amount',
+    field: 'principal_amount'
+  },
+  {
+    label: 'Closing Balance',
+    field: 'closing_balance'
+  }
+]" />
     </div>
   </q-page>
 </template>
@@ -55,7 +68,7 @@
   text-align: left;
 }
 
-.input-select{
+.input-select {
   background-color: rgb(238, 238, 238);
   padding-left: 2%;
 }
@@ -112,13 +125,7 @@ export default defineComponent({
         display: 'Monthly',
         terms: null,
       },
-      tableData: {
-        opening: [],
-        emi: [],
-        interest_payment: [],
-        principal_amount: [],
-        closing_balance: [],
-      },
+      tableData: [],
       displayOptions: ['Monthly', 'Annually'],
       showTable: false,
     };
@@ -133,7 +140,7 @@ export default defineComponent({
   },
   methods: {
     calculate() {
-      Object.keys(this.tableData).forEach(key => this.tableData[key] = []);
+      this.tableData = [];
 
       let principal = parseFloat(this.form.amount);
       const interest_rate = parseFloat(this.form.interest_rate);
@@ -141,16 +148,21 @@ export default defineComponent({
       const monthly_interest = this.form.display === 'Monthly' ? interest_rate / 12 / 100 : interest_rate / 100;
 
       for (let i = 0; i < terms; i++) {
-        this.tableData.opening.push(principal);
+        const opening = principal;
         const calc_emi = (principal * monthly_interest * Math.pow(1 + monthly_interest, terms)) /
           (Math.pow(1 + monthly_interest, terms) - 1);
-        this.tableData.emi.push(calc_emi);
         const calc_interest_pay = principal * monthly_interest;
-        this.tableData.interest_payment.push(calc_interest_pay);
         const calc_principal_amount = calc_emi - calc_interest_pay;
-        this.tableData.principal_amount.push(calc_principal_amount);
         const calc_closing_balance = principal - calc_principal_amount;
-        this.tableData.closing_balance.push(calc_closing_balance);
+
+        this.tableData.push({
+          opening,
+          emi: calc_emi,
+          interest_payment: calc_interest_pay,
+          principal_amount: calc_principal_amount,
+          closing_balance: calc_closing_balance,
+        });
+
         principal = calc_closing_balance;
       }
 
