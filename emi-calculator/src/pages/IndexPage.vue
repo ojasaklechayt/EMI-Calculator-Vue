@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="emi-calculator">
     <div class="calculator-container">
       <h2 class="title">Loan Calculator</h2>
       <q-input class="input-ok" filled v-model="form.amount" placeholder="Loan Amount" input-class="text-left" />
@@ -7,22 +7,23 @@
       <q-input class="input-ok" filled v-model="form.interest_rate" placeholder="Interest Rate (%)"
         input-class="text-left" />
       <br>
-      <q-select class="input-select" v-model="form.display" :options="displayOptions" label="Display"></q-select>
+      <q-select class="input-select" v-model="form.display" :options="displayOptions" label="Display"
+        use-input></q-select>
       <br>
       <q-input class="input-ok" filled v-model="form.terms" input-class="text-left" :placeholder="loanTermsPlaceholder" />
       <br>
       <q-btn type="submit" class="calculate-button" label="Calculate" @click="calculate" />
     </div>
-
-    <div class="table-container" v-if="showTable">
-      <q-table class="custom-table" :rows="tableData.map((row, index) => ({
-        index: index + 1,
-        opening: row.opening.toFixed(2),
-        emi: row.emi.toFixed(2),
-        interest_payment: row.interest_payment.toFixed(2),
-        principal_amount: row.principal_amount.toFixed(2),
-        closing_balance: row.closing_balance.toFixed(2)
-      }))" :columns="[
+    <div class="table-chart-container">
+      <div class="table-container" v-if="showTable">
+        <q-table class="custom-table" :rows="tableData.map((row, index) => ({
+          index: index + 1,
+          opening: row.opening.toFixed(2),
+          emi: row.emi.toFixed(2),
+          interest_payment: row.interest_payment.toFixed(2),
+          principal_amount: row.principal_amount.toFixed(2),
+          closing_balance: row.closing_balance.toFixed(2),
+        }))" :columns="[
   {
     label: displayLabel,
     field: 'index',
@@ -49,12 +50,20 @@
     field: 'closing_balance'
   }
 ]" />
+      </div>
+      <Bar id="my-chart-id" :options="chartOptions" :data="chartData" v-if="showTable" />
     </div>
-    <Bar id="my-chart-id" :options="chartOptions" :data="chartData" />
   </q-page>
 </template>
 
 <style>
+.emi-calculator {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .calculator-container {
   width: 500px;
   margin: 0 auto;
@@ -63,6 +72,8 @@
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  /* Align content to the center */
 }
 
 .text-left {
@@ -83,12 +94,18 @@
 .title {
   font-size: 24px;
   margin-bottom: 10px;
-  text-align: center;
+}
+
+.table-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-top: 20px;
+  margin-right: 100px;
 }
 
 .table-container {
   margin-top: 20px;
-  margin-right: 100px;
   margin-bottom: 20px;
 }
 
@@ -114,7 +131,7 @@
 </style>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent } from 'vue';
 import { Bar } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
 
@@ -136,7 +153,7 @@ export default defineComponent({
       tableData: [],
       displayOptions: ['Monthly', 'Annually'],
       showTable: false,
-      chartData: reactive({
+      chartData: {
         labels: [],
         datasets: [
           {
@@ -146,12 +163,57 @@ export default defineComponent({
             borderWidth: 1,
             hoverBackgroundColor: 'rgba(75,192,192,0.4)',
             hoverBorderColor: 'rgba(75,192,192,1)',
-            data: ref([1,2,3,4,5,6,7,8,9,10]),
-          }],
-      }),
+            data: [],
+          },
+          {
+            label: 'EMI',
+            backgroundColor: 'rgba(255,0,0,0.2)',
+            borderColor: 'rgba(255,0,0,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,0,0,0.4)',
+            hoverBorderColor: 'rgba(255,0,0,1)',
+            data: [],
+          },
+          {
+            label: 'Interest Payment',
+            backgroundColor: 'rgba(0,255,0,0.2)',
+            borderColor: 'rgba(0,255,0,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(0,255,0,0.4)',
+            hoverBorderColor: 'rgba(0,255,0,1)',
+            data: [],
+          },
+          {
+            label: 'Principal Amount',
+            backgroundColor: 'rgba(255,255,0,0.2)',
+            borderColor: 'rgba(255,255,0,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,255,0,0.4)',
+            hoverBorderColor: 'rgba(255,255,0,1)',
+            data: [],
+          },
+          {
+            label: 'Closing Balance',
+            backgroundColor: 'rgba(0,0,255,0.2)',
+            borderColor: 'rgba(0,0,255,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(0,0,255,0.4)',
+            hoverBorderColor: 'rgba(0,0,255,1)',
+            data: [],
+          },
+        ],
+      },
       chartOptions: {
-        responsive: true
-      }
+        responsive: true,
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true,
+          },
+        },
+      },
     };
   },
   computed: {
@@ -189,9 +251,11 @@ export default defineComponent({
 
         principal = calc_closing_balance;
         this.chartData.labels.push(this.displayLabel === 'Months' ? `Month ${i + 1}` : `Year ${i + 1}`);
-        // Vue.set(this.chartData.datasets[0].data, i, opening);
-        // Having Stack Issue while pushing data in chardData.datasets[0].data
-        console.log(opening);
+        this.chartData.datasets[0].data.push(opening);
+        this.chartData.datasets[1].data.push(calc_emi);
+        this.chartData.datasets[2].data.push(calc_interest_pay);
+        this.chartData.datasets[3].data.push(calc_principal_amount);
+        this.chartData.datasets[4].data.push(calc_closing_balance);
       }
 
       this.showTable = true;
