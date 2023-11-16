@@ -50,6 +50,7 @@
   }
 ]" />
     </div>
+    <Bar id="my-chart-id" :options="chartOptions" :data="chartData" />
   </q-page>
 </template>
 
@@ -113,10 +114,17 @@
 </style>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
+import { Bar } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 export default defineComponent({
   name: 'IndexPage',
+  components: {
+    Bar,
+  },
   data() {
     return {
       form: {
@@ -128,6 +136,22 @@ export default defineComponent({
       tableData: [],
       displayOptions: ['Monthly', 'Annually'],
       showTable: false,
+      chartData: reactive({
+        labels: [],
+        datasets: [
+          {
+            label: 'Opening Balance',
+            backgroundColor: 'rgba(75,192,192,0.2)',
+            borderColor: 'rgba(75,192,192,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(75,192,192,0.4)',
+            hoverBorderColor: 'rgba(75,192,192,1)',
+            data: ref([1,2,3,4,5,6,7,8,9,10]),
+          }],
+      }),
+      chartOptions: {
+        responsive: true
+      }
     };
   },
   computed: {
@@ -164,10 +188,14 @@ export default defineComponent({
         });
 
         principal = calc_closing_balance;
+        this.chartData.labels.push(this.displayLabel === 'Months' ? `Month ${i + 1}` : `Year ${i + 1}`);
+        // Vue.set(this.chartData.datasets[0].data, i, opening);
+        console.log(opening);
       }
 
       this.showTable = true;
     },
+
     formatValue(value) {
       return value ? value.toFixed(2) : '';
     },
