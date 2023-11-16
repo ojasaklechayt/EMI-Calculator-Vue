@@ -190,6 +190,7 @@ export default defineComponent({
         principal = calc_closing_balance;
         this.chartData.labels.push(this.displayLabel === 'Months' ? `Month ${i + 1}` : `Year ${i + 1}`);
         // Vue.set(this.chartData.datasets[0].data, i, opening);
+        // Having Stack Issue while pushing data in chardData.datasets[0].data
         console.log(opening);
       }
 
